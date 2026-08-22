@@ -19,5 +19,10 @@ while True:
                 player.left=True
             if i.key==pygame.K_ESCAPE:
                exit()
+        if i.type==pygame.KEYUP:
+            if i.key==pygame.K_d:
+                player.right=False
+            if i.key==pygame.K_a:
+                player.left=False
     pygame.display.update()
 
