@@ -28,9 +28,9 @@ class Player():
             'double_jump': self.double_jump,
         }
     def render(self,skrin):
-        self.anims[self.animname].render(skrin,self.x,self.y,self.side)
+        self.anims[self.animname].render(skrin,self.x-lvl.camerax,self.y-lvl.cameray,self.side)
         hitbox=self.get_hitbox()
-        pygame.draw.rect(skrin,[0,255,0],hitbox,3)
+        pygame.draw.rect(skrin,[0,255,0],hitbox.move(-lvl.camerax,-lvl.cameray),3)
 
     def update(self):
         self.anims[self.animname].update()

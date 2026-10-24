@@ -3,11 +3,13 @@ import pygame
 import pytmx
 image=pygame.image.load('tyled/безымянный.png')
 image=pygame.transform.scale_by(image,2)
+camerax=0
+cameray=0
 
 def render(skrin):
-    skrin.blit(image,[0,0])
+    skrin.blit(image,[0-camerax,0-cameray])
     for i in hitboxes:
-        pygame.draw.rect(skrin,[255,0,0],i,3)
+        pygame.draw.rect(skrin,[255,0,0],i.move(-camerax,-cameray),3)
 
 hitboxes=[]
 
