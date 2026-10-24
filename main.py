@@ -38,5 +38,8 @@ while True:
                 player.right=False
             if i.key==pygame.K_a:
                 player.left=False
+        if i.type==pygame.MOUSEBUTTONDOWN:
+            if i.button==1:
+                player.attacks()
     pygame.display.update()
 

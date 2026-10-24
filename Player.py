@@ -7,6 +7,7 @@ class Player():
         self.y=100
         self.gravity=0.7
         self.vy=0
+        self.time_attack=0
         self.left=False
         self.right=False
         self.size=5
@@ -20,15 +21,20 @@ class Player():
         self.jumpup=animation.Animation('resourspack/herochar sprites(new)/herochar_jump_up_anim_strip_3.png',3,self.size)
         self.jumpdown=animation.Animation('resourspack/herochar sprites(new)/herochar_jump_down_anim_strip_3.png',3,self.size)
         self.double_jump=animation.Animation('resourspack/herochar sprites(new)/herochar_jump_double_anim_strip_3.png',3,self.size)
+        self.attack=animation.Animation('resourspack/herochar sprites(new)/herochar_sword_attack_anim_strip_4.png',4,self.size)
         self.anims={
             'run': self.run,
             'idle': self.idle,
             'jumpup': self.jumpup,
             'jumpdown': self.jumpdown,
             'double_jump': self.double_jump,
+            'attack': self.attack,
         }
     def render(self,skrin):
-        self.anims[self.animname].render(skrin,self.x-lvl.camerax,self.y-lvl.cameray,self.side)
+        if self.animname=='attack' and self.side=='left':
+            self.anims[self.animname].render(skrin,self.x-lvl.camerax-90,self.y-lvl.cameray,self.side)
+        else:
+            self.anims[self.animname].render(skrin,self.x-lvl.camerax,self.y-lvl.cameray,self.side)
         hitbox=self.get_hitbox()
         pygame.draw.rect(skrin,[0,255,0],hitbox.move(-lvl.camerax,-lvl.cameray),3)
 
@@ -52,6 +58,9 @@ class Player():
             self.animname='jumpdown'
         if self.time_in_the_air>3 and self.jumps==0:
             self.animname='double_jump'
+        if self.time_attack>0:
+            self.animname='attack'
+            self.time_attack-=1
         self.vy+=self.gravity
         self.y+=self.vy
         self.time_in_the_air+=1
@@ -89,4 +98,11 @@ class Player():
         if self.jumps>0:
             self.vy=-13
             self.jumps-=1
-        
+
+    def attacks(self):
+        self.time_attack=4*5
+    
+    def get_hitbox_attack(self):
+            hitbox=pygame.Rect(self.x,self.y,110,90)   
+            return hitbox 
+    

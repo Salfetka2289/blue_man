@@ -17,6 +17,7 @@ class Goblin():
         self.left=False
         self.right=False
         self.vy=0
+        self.hp=100
         self.gravity=0.7
         self.anims={
             'idle': animation.Animation('resourspack/enemies sprites/goblin/goblin_idle_anim_strip_4.png',4,self.size),
@@ -27,6 +28,8 @@ class Goblin():
         self.anims[self.animname].render(skrin,self.x-lvl.camerax,self.y-lvl.cameray,self.side)
         self.hitbox=self.get_hitbox()
         pygame.draw.rect(skrin,(0,0,255),self.hitbox.move(-lvl.camerax,-lvl.cameray),3)
+        pygame.draw.rect(skrin,[255,0,0],[self.x-lvl.camerax-20,self.y-lvl.cameray-10,100,10])
+        pygame.draw.rect(skrin,[0,255,0],[self.x-lvl.camerax-20,self.y-lvl.cameray-10,self.hp,10])
 
     def update(self):
         self.anims[self.animname].update()
@@ -92,4 +95,6 @@ def load_goblins():
         if i[2]!=0:
             goblin=Goblin(i[0]*32*2,i[1]*32*2)
             enemes.append(goblin)
+
+
 
