@@ -1,6 +1,7 @@
 import animation
 import pygame
 import lvl
+import utils
 class Player():
     def __init__(self):
         self.x=100
@@ -15,7 +16,11 @@ class Player():
         self.side='left'
         self.max_jump=2
         self.jumps=2
+        self.hp=100
         self.time_in_the_air=0
+        self.left_hp=utils.load_image('resourspack/hud elements/health_hud_left.png',3.2)
+        self.middle_hp=utils.load_image('resourspack/hud elements/health_hud_middle.png',3.2)
+        self.right_hp=utils.load_image('resourspack/hud elements/health_hud_right.png',3.2)
         self.idle=animation.Animation('resourspack/herochar sprites(new)/herochar_idle_anim_strip_4.png',4,self.size)
         self.run=animation.Animation('resourspack/herochar sprites(new)/herochar_run_anim_strip_6.png',6,self.size)
         self.jumpup=animation.Animation('resourspack/herochar sprites(new)/herochar_jump_up_anim_strip_3.png',3,self.size)
@@ -37,6 +42,15 @@ class Player():
             self.anims[self.animname].render(skrin,self.x-lvl.camerax,self.y-lvl.cameray,self.side)
         hitbox=self.get_hitbox()
         pygame.draw.rect(skrin,[0,255,0],hitbox.move(-lvl.camerax,-lvl.cameray),3)
+        pygame.draw.rect(skrin,[255,0,0],[50,50,265,40])
+        pygame.draw.rect(skrin,[0,255,0],[50,50,self.hp*2.65,40])
+        skrin.blit(self.left_hp,[45,45])
+        x=45+self.left_hp.get_width()
+        for i in range(4):
+            skrin.blit(self.middle_hp,[x,45])
+            x+=self.middle_hp.get_width()
+        skrin.blit(self.right_hp,[270,45])
+        
 
     def update(self):
         self.anims[self.animname].update()

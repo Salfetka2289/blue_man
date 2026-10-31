@@ -21,7 +21,8 @@ class Goblin():
         self.gravity=0.7
         self.anims={
             'idle': animation.Animation('resourspack/enemies sprites/goblin/goblin_idle_anim_strip_4.png',4,self.size),
-            'run': animation.Animation('resourspack/enemies sprites/goblin/goblin_run_anim_strip_6.png',6,self.size)
+            'run': animation.Animation('resourspack/enemies sprites/goblin/goblin_run_anim_strip_6.png',6,self.size),
+            'attack': animation.Animation('resourspack/enemies sprites/goblin/goblin_attack_anim_strip_4.png',4,self.size)
         }
 
     def render(self,skrin):
@@ -30,6 +31,8 @@ class Goblin():
         pygame.draw.rect(skrin,(0,0,255),self.hitbox.move(-lvl.camerax,-lvl.cameray),3)
         pygame.draw.rect(skrin,[255,0,0],[self.x-lvl.camerax-20,self.y-lvl.cameray-10,100,10])
         pygame.draw.rect(skrin,[0,255,0],[self.x-lvl.camerax-20,self.y-lvl.cameray-10,self.hp,10])
+        i=self.hitbox_attack()
+        pygame.draw.rect(skrin,[255,255,255],i.move(-lvl.camerax,-lvl.cameray),2)
 
     def update(self):
         self.anims[self.animname].update()
@@ -73,7 +76,7 @@ class Goblin():
                     self.vy=0
         self.y=playerhit.y
 
-    def control(self):
+    def control(self,player):
         self.timer-=1
         if self.timer==0:
             if self.animname=='idle':
@@ -88,6 +91,18 @@ class Goblin():
                 self.left=False
                 self.right=False
             self.timer=random.randint(30,90)
+        g=self.hitbox_attack()
+        p=player.get_hitbox()
+        if g.colliderect(p):
+            self.animname='attack'
+            self.right=False
+            self.left=False
+
+    def hitbox_attack(self):
+        if self.side=='right':
+            return pygame.Rect(self.x+50,self.y,60,80)
+        else:
+            return pygame.Rect(self.x-90,self.y,60,80)
 
 def load_goblins():
     card=pytmx.load_pygame('tyled/безымянный.tmx')
@@ -95,6 +110,7 @@ def load_goblins():
         if i[2]!=0:
             goblin=Goblin(i[0]*32*2,i[1]*32*2)
             enemes.append(goblin)
+
 
 
 

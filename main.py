@@ -19,7 +19,7 @@ while True:
     for i in goblin.enemes:
         i.render(skrin)
         i.update()
-        i.control()
+        i.control(player)
     lvl.camerax+=(player.x-lvl.camerax-skrin.get_width()/2)/20
     lvl.cameray+=(player.y-lvl.cameray-skrin.get_height()/2)/20
     ivents=pygame.event.get()
