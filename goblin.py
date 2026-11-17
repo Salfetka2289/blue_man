@@ -4,7 +4,7 @@ import lvl
 import animation
 import pytmx
 import random
-enemes=[]
+goblins=[]
 
 class Goblin():
     def __init__(self,x,y):
@@ -18,11 +18,15 @@ class Goblin():
         self.right=False
         self.vy=0
         self.hp=100
+        self.hit_timer=0
+        self.death_timer=0
         self.gravity=0.7
         self.anims={
             'idle': animation.Animation('resourspack/enemies sprites/goblin/goblin_idle_anim_strip_4.png',4,self.size),
             'run': animation.Animation('resourspack/enemies sprites/goblin/goblin_run_anim_strip_6.png',6,self.size),
-            'attack': animation.Animation('resourspack/enemies sprites/goblin/goblin_attack_anim_strip_4.png',4,self.size)
+            'attack': animation.Animation('resourspack/enemies sprites/goblin/goblin_attack_anim_strip_4.png',4,self.size),
+            'hit': animation.Animation('resourspack/enemies sprites/goblin/goblin_hit_anim_strip_3.png',3,self.size),
+            'death': animation.Animation('resourspack/enemies sprites/goblin/goblin_death_anim_strip_6.png',6,self.size)
         }
 
     def render(self,skrin):
@@ -49,6 +53,16 @@ class Goblin():
         self.vy+=self.gravity
         self.y+=self.vy
         self.collision_y()
+        if self.hit_timer>0:
+            self.animname='hit'
+            self.hit_timer-=1
+            if self.death_timer==0:
+                self.death_timer=30
+        if self.hp<=0:
+            self.animname='death'
+            self.death_timer-=1
+            if self.death_timer==0:
+                goblins.remove(self)
 
     def get_hitbox(self):
         return pygame.Rect(self.x,self.y,50,80)
@@ -93,23 +107,26 @@ class Goblin():
             self.timer=random.randint(30,90)
         g=self.hitbox_attack()
         p=player.get_hitbox()
-        if g.colliderect(p):
+        if g.colliderect(p) and self.hit_timer==0 and self.death_timer==0:
             self.animname='attack'
+            player.hit_timer=30
             self.right=False
             self.left=False
+            
 
     def hitbox_attack(self):
         if self.side=='right':
             return pygame.Rect(self.x+50,self.y,60,80)
         else:
-            return pygame.Rect(self.x-90,self.y,60,80)
+            return pygame.Rect(self.x-50,self.y,60,80)
 
 def load_goblins():
     card=pytmx.load_pygame('tyled/безымянный.tmx')
     for i in card.get_layer_by_name('goblins'):
         if i[2]!=0:
             goblin=Goblin(i[0]*32*2,i[1]*32*2)
-            enemes.append(goblin)
+            goblins.append(goblin)
+
 
 
 

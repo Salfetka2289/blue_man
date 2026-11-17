@@ -2,6 +2,7 @@ import animation
 import pygame
 import lvl
 import utils
+import goblin
 class Player():
     def __init__(self):
         self.x=100
@@ -17,6 +18,7 @@ class Player():
         self.max_jump=2
         self.jumps=2
         self.hp=100
+        self.hit_timer=0
         self.time_in_the_air=0
         self.left_hp=utils.load_image('resourspack/hud elements/health_hud_left.png',3.2)
         self.middle_hp=utils.load_image('resourspack/hud elements/health_hud_middle.png',3.2)
@@ -27,6 +29,7 @@ class Player():
         self.jumpdown=animation.Animation('resourspack/herochar sprites(new)/herochar_jump_down_anim_strip_3.png',3,self.size)
         self.double_jump=animation.Animation('resourspack/herochar sprites(new)/herochar_jump_double_anim_strip_3.png',3,self.size)
         self.attack=animation.Animation('resourspack/herochar sprites(new)/herochar_sword_attack_anim_strip_4.png',4,self.size)
+        self.hit=animation.Animation('resourspack/herochar sprites(new)/herochar_hit_anim_strip_3.png',3,self.size)
         self.anims={
             'run': self.run,
             'idle': self.idle,
@@ -34,6 +37,7 @@ class Player():
             'jumpdown': self.jumpdown,
             'double_jump': self.double_jump,
             'attack': self.attack,
+            'hit': self.hit,
         }
     def render(self,skrin):
         if self.animname=='attack' and self.side=='left':
@@ -75,6 +79,17 @@ class Player():
         if self.time_attack>0:
             self.animname='attack'
             self.time_attack-=1
+            player_hitattack=self.get_hitbox_attack()
+            for i in goblin.goblins:
+                goblin_hitattack=i.hitbox_attack()
+                if goblin_hitattack.colliderect(player_hitattack):
+                    i.hp-=1.2
+                    i.hit_timer=30
+        if self.hit_timer>0:
+            self.hp-=0.25
+            self.animname='hit'
+            self.hit_timer-=1
+                
         self.vy+=self.gravity
         self.y+=self.vy
         self.time_in_the_air+=1

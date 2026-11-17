@@ -16,7 +16,7 @@ while True:
     lvl.render(skrin)
     player.render(skrin)
     player.update()
-    for i in goblin.enemes:
+    for i in goblin.goblins:
         i.render(skrin)
         i.update()
         i.control(player)
