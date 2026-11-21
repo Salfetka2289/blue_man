@@ -5,6 +5,7 @@ image=pygame.image.load('tyled/безымянный.png')
 image=pygame.transform.scale_by(image,2)
 camerax=0
 cameray=0
+shake_timer=0
 
 def render(skrin):
     skrin.blit(image,[0-camerax,0-cameray])
@@ -13,7 +14,8 @@ def render(skrin):
 
 hitboxes=[]
 
-def load_hiboxes():
+def load_hitboxes():
+    hitboxes.clear()
     map=pytmx.load_pygame('tyled/безымянный.tmx')
     for i in map.get_layer_by_name('ground'):
         if i[2]!=0:

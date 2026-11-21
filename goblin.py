@@ -112,6 +112,7 @@ class Goblin():
             player.hit_timer=30
             self.right=False
             self.left=False
+            lvl.shake_timer=30
             
 
     def hitbox_attack(self):
@@ -121,6 +122,7 @@ class Goblin():
             return pygame.Rect(self.x-50,self.y,60,80)
 
 def load_goblins():
+    goblins.clear()
     card=pytmx.load_pygame('tyled/безымянный.tmx')
     for i in card.get_layer_by_name('goblins'):
         if i[2]!=0:

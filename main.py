@@ -3,13 +3,20 @@ import animation
 import Player
 import lvl
 import goblin
+import share
+import random
 pygame.init()
 clock=pygame.time.Clock()
 skrin=pygame.display.set_mode([0,0])
-player=Player.Player()
-lvl.load_hiboxes()
-goblin.load_goblins()
 
+def load_lvl(): 
+    global player
+    player=Player.Player()
+    lvl.load_hitboxes()
+    goblin.load_goblins()
+
+load_lvl()
+share.load_lvl=load_lvl
 while True:
     clock.tick(60)
     skrin.fill([0,0,0])
@@ -20,6 +27,10 @@ while True:
         i.render(skrin)
         i.update()
         i.control(player)
+    if lvl.shake_timer>0:
+        lvl.camerax-=random.randint(-lvl.shake_timer,lvl.shake_timer)/2
+        lvl.cameray-=random.randint(-lvl.shake_timer,lvl.shake_timer)/2
+        lvl.shake_timer-=1
     lvl.camerax+=(player.x-lvl.camerax-skrin.get_width()/2)/20
     lvl.cameray+=(player.y-lvl.cameray-skrin.get_height()/2)/20
     ivents=pygame.event.get()
